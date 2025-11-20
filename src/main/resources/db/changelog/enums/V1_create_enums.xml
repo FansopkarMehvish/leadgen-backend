@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+    <changeSet id="0-create-enums" author="mehvish">
+        <sql>CREATE TYPE role_enum AS ENUM ('CUSTOMER','BUSINESS','ADMIN');</sql>
+        <sql>CREATE TYPE lead_urgency_enum AS ENUM ('LOW','MEDIUM','HIGH');</sql>
+        <sql>CREATE TYPE lead_status_enum AS ENUM ('NEW','ASSIGNED','CLAIMED','IN_PROGRESS','CLOSED','REJECTED');</sql>
+        <sql>CREATE TYPE assignment_status_enum AS ENUM ('NOTIFIED','CLAIMED','EXPIRED');</sql>
+    </changeSet>
+</databaseChangeLog>

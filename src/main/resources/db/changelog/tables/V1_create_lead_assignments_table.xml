@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+    <changeSet id="4-create-lead-assignments" author="mehvish">
+        <createTable tableName="lead_assignments">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="lead_id" type="BIGINT"/>
+            <column name="business_id" type="BIGINT"/>
+            <column name="score" type="INT"/>
+            <column name="rank" type="INT"/>
+            <column name="is_claimed" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="claimed_at" type="TIMESTAMP"/>
+            <column name="expires_at" type="TIMESTAMP"/>
+            <column name="status" type="assignment_status_enum"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="lead_assignments"
+                                 baseColumnNames="lead_id"
+                                 referencedTableName="leads"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_assignment_lead"/>
+
+        <addForeignKeyConstraint baseTableName="lead_assignments"
+                                 baseColumnNames="business_id"
+                                 referencedTableName="users"
+                                 referencedColumnNames="id"
+                                 constraintName="fk_assignment_business"/>
+    </changeSet>
+</databaseChangeLog>

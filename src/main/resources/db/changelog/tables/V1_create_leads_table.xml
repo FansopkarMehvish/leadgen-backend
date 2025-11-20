@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+    <changeSet id="3-create-leads" author="mehvish">
+        <createTable tableName="leads">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="customer_name" type="VARCHAR(255)"/>
+            <column name="customer_phone" type="VARCHAR(50)"/>
+            <column name="customer_email" type="VARCHAR(255)"/>
+            <column name="category_id" type="BIGINT"/>
+            <column name="description" type="TEXT"/>
+            <column name="budget_from" type="INT"/>
+            <column name="budget_to" type="INT"/>
+            <column name="location_text" type="VARCHAR(255)"/>
+            <column name="latitude" type="DOUBLE PRECISION"/>
+            <column name="longitude" type="DOUBLE PRECISION"/>
+            <column name="urgency" type="lead_urgency_enum"/>
+            <column name="status" type="lead_status_enum"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
