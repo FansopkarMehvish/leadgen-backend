@@ -3,6 +3,7 @@ package com.example.leadgen_backend.controller;
 import com.example.leadgen_backend.model.Lead;
 import com.example.leadgen_backend.service.LeadService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class LeadController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('CUSTOMER','ADMIN')")
     public ResponseEntity<?> createLead(@RequestBody Lead lead) {
         Lead saved = leadService.createLead(lead);
         return ResponseEntity.status(201).body(saved);
