@@ -1,38 +1,74 @@
 package com.example.leadgen_backend.service.impl;
 
+import com.example.leadgen_backend.dto.AuthRegisterRequest;
+import com.example.leadgen_backend.dto.BusinessProfileRequest;
+import com.example.leadgen_backend.enums.Role;
+import com.example.leadgen_backend.model.BusinessProfile;
 import com.example.leadgen_backend.model.User;
+import com.example.leadgen_backend.repository.BusinessProfileRepository;
 import com.example.leadgen_backend.repository.UserRepository;
 import com.example.leadgen_backend.security.JwtUtil;
 import com.example.leadgen_backend.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    private final BusinessProfileRepository businessProfileRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AuthServiceImpl(UserRepository userRepository, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.jwtUtil = jwtUtil;
-        this.passwordEncoder = passwordEncoder;
+    @Override
+    @Transactional
+    public User register(AuthRegisterRequest req) {
+
+        User user = User.builder()
+                .name(req.name())
+                .email(req.email())
+                .phone(req.phone())
+                .passwordHash(passwordEncoder.encode(req.password()))
+                .role(req.role())
+                .latitude(req.latitude())
+                .longitude(req.longitude())
+                .verified(false)
+                .build();
+
+        User saved = userRepository.save(user);
+
+        // Only create profile if role = BUSINESS
+        if (req.role() == Role.BUSINESS && req.businessProfile() != null) {
+            BusinessProfileRequest bp = req.businessProfile();
+
+            BusinessProfile profile = BusinessProfile.builder()
+                    .user(saved)
+                    .businessName(bp.businessName())
+                    .description(bp.description())
+                    .minBudget(bp.minBudget())
+                    .maxBudget(bp.maxBudget())
+                    .serviceRadiusKm(bp.serviceRadiusKm())
+                    .active(true)
+                    .build();
+
+            businessProfileRepository.save(profile);
+        }
+
+        return saved;
     }
 
     @Override
-    public User register(User user, String rawPassword) {
-        user.setPasswordHash(passwordEncoder.encode(rawPassword));
-        return userRepository.save(user);
-    }
+    public String login(String username, String password) {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    @Override
-    public String login(String username, String rawPassword) {
-        // username could be email or phone - simple example
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("User not found"));
-        if (!passwordEncoder.matches(rawPassword, user.getPasswordHash()))
+        if (!passwordEncoder.matches(password, user.getPasswordHash())) {
             throw new RuntimeException("Invalid credentials");
-        // generate token with username (email) as subject for easier lookup
+        }
+
         return jwtUtil.generateToken(user.getEmail());
     }
 }

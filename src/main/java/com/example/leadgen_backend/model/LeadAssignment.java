@@ -34,4 +34,7 @@ public class LeadAssignment {
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(columnDefinition = "assignment_status_enum")
     private AssignmentStatus status = AssignmentStatus.NOTIFIED;
+
+    @Version
+    private Long version;
 }

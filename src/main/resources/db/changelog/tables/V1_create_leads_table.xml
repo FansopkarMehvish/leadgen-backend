@@ -6,7 +6,7 @@
 
     <changeSet id="3-create-leads" author="mehvish">
         <createTable tableName="leads">
-            <column name="id" type="BIGSERIAL">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="customer_name" type="VARCHAR(255)"/>

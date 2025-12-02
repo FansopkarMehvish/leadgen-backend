@@ -10,4 +10,5 @@
     <include file="db/changelog/tables/V1_create_business_profiles_table.xml"/>
     <include file="db/changelog/tables/V1_create_leads_table.xml"/>
     <include file="db/changelog/tables/V1_create_lead_assignments_table.xml"/>
+    <include file="db/changelog/tables/V1_alter_lead_assignments_table.xml"/>
 </databaseChangeLog>

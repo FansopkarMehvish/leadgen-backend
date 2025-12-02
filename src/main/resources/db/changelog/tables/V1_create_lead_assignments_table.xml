@@ -6,8 +6,8 @@
 
     <changeSet id="4-create-lead-assignments" author="mehvish">
         <createTable tableName="lead_assignments">
-            <column name="id" type="BIGSERIAL">
-                <constraints primaryKey="true"/>
+            <column name="id" type="BIGINT" autoIncrement="true">
+            <constraints primaryKey="true"/>
             </column>
             <column name="lead_id" type="BIGINT"/>
             <column name="business_id" type="BIGINT"/>
