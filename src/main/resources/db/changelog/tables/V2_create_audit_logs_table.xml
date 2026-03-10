@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.15.xsd">
+
+    <changeSet id="9-create-audit-logs" author="mehvish">
+        <createTable tableName="audit_logs">
+            <column name="id" type="BIGSERIAL" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="entity_type" type="VARCHAR(100)"/>
+            <column name="entity_id" type="BIGINT"/>
+            <column name="action" type="VARCHAR(50)"/>
+            <column name="performed_by" type="VARCHAR(255)"/>
+            <column name="performed_by_user_id" type="BIGINT"/>
+            <column name="old_values" type="TEXT"/>
+            <column name="new_values" type="TEXT"/>
+            <column name="ip_address" type="VARCHAR(100)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+
+        <createIndex indexName="idx_audit_entity" tableName="audit_logs">
+            <column name="entity_type"/>
+            <column name="entity_id"/>
+        </createIndex>
+
+        <createIndex indexName="idx_audit_performed_by" tableName="audit_logs">
+            <column name="performed_by"/>
+        </createIndex>
+
+        <createIndex indexName="idx_audit_created_at" tableName="audit_logs">
+            <column name="created_at"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

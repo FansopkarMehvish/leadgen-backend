@@ -2,6 +2,7 @@ package com.example.leadgen_backend.controller;
 
 import com.example.leadgen_backend.dto.AuthRegisterRequest;
 import com.example.leadgen_backend.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody AuthRegisterRequest req) {
+    public ResponseEntity<?> register(@Valid @RequestBody AuthRegisterRequest req) {
         return ResponseEntity.ok(authService.register(req));
     }
 

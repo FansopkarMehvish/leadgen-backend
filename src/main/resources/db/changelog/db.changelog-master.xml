@@ -11,4 +11,9 @@
     <include file="db/changelog/tables/V1_create_leads_table.xml"/>
     <include file="db/changelog/tables/V1_create_lead_assignments_table.xml"/>
     <include file="db/changelog/tables/V1_alter_lead_assignments_table.xml"/>
+    <include file="db/changelog/tables/V2_create_categories_table.xml"/>
+    <include file="db/changelog/tables/V2_alter_business_profiles_add_category.xml"/>
+    <include file="db/changelog/tables/V2_create_audit_logs_table.xml"/>
+    <include file="db/changelog/tables/V2_create_verification_tokens_table.xml"/>
+    <include file="db/changelog/tables/V2_create_notifications_table.xml"/>
 </databaseChangeLog>

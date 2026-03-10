@@ -7,6 +7,7 @@ import com.example.leadgen_backend.model.LeadAssignment;
 import com.example.leadgen_backend.repository.LeadAssignmentRepository;
 import com.example.leadgen_backend.repository.LeadRepository;
 import com.example.leadgen_backend.service.LeadAssignmentService;
+import com.example.leadgen_backend.service.NotificationService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,15 @@ public class LeadAssignmentServiceImpl implements LeadAssignmentService {
 
     private final LeadAssignmentRepository assignmentRepository;
     private final LeadRepository leadRepository;
+    private final NotificationService notificationService;
 
     public LeadAssignmentServiceImpl(
             LeadAssignmentRepository assignmentRepository,
-            LeadRepository leadRepository) {
+            LeadRepository leadRepository,
+            NotificationService notificationService) {
         this.assignmentRepository = assignmentRepository;
         this.leadRepository = leadRepository;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -75,6 +79,29 @@ public class LeadAssignmentServiceImpl implements LeadAssignmentService {
         }
 
         assignmentRepository.saveAll(others);
+
+        // Send notification to business that claimed
+        notificationService.createNotification(
+                businessId,
+                "LEAD_CLAIMED",
+                "Lead Claimed Successfully",
+                "You have successfully claimed lead #" + lead.getId() + " for " + lead.getCustomerName(),
+                lead.getId(),
+                assignment.getId()
+        );
+
+        // Send notifications to other businesses that they lost the opportunity
+        for (LeadAssignment other : others) {
+            if (!other.getId().equals(assignmentId)) {
+                notificationService.createNotification(
+                        other.getBusinessId(),
+                        "LEAD_EXPIRED",
+                        "Lead No Longer Available",
+                        "Lead #" + lead.getId() + " has been claimed by another business",
+                        lead.getId(),
+                        other.getId()
+                );
+            }
+        }
     }
 }
-

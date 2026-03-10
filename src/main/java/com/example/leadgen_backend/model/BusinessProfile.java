@@ -25,4 +25,6 @@ public class BusinessProfile {
     private Integer maxBudget;
     private Integer serviceRadiusKm;
     private Boolean active = true;
+
+    private Long categoryId;
 }

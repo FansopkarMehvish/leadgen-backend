@@ -51,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
                     .minBudget(bp.minBudget())
                     .maxBudget(bp.maxBudget())
                     .serviceRadiusKm(bp.serviceRadiusKm())
+                    .categoryId(bp.categoryId())
                     .active(true)
                     .build();
 
