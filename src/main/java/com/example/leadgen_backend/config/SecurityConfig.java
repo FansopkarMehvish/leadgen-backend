@@ -37,9 +37,10 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/webjars/**", "/swagger-resources/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                // JWT filter should run before BasicAuthenticationFilter
                 .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class);
 
         return http.build();
@@ -54,7 +55,6 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
